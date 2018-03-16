@@ -39,17 +39,193 @@ public class MotionDnaReactBridge extends ReactContextBaseJavaModule implements 
     }
 
     @ReactMethod
-    public void start()
+    public void runMotionDna(String key)
     {
         motionDnaApplication = new MotionDnaApplication(this);
-        motionDnaApplication.runMotionDna("4e7485cfe0c552a50112f33c573dca8c4e174786a59a6e407a589aa6d1d71d7a");
+        motionDnaApplication.runMotionDna(key);
+    }
+
+    @ReactMethod
+    public void setExternalPositioningState(String state)
+    {
+        if (state.equals("OFF")) {
+            motionDnaApplication.setExternalPositioningState(MotionDna.ExternalPositioningState.OFF);
+        }
+        else if (state.equals("HIGH_ACCURACY")){
+            motionDnaApplication.setExternalPositioningState(MotionDna.ExternalPositioningState.HIGH_ACCURACY);
+        }
+        else if (state.equals("LOW_ACCURACY")) {
+            motionDnaApplication.setExternalPositioningState(MotionDna.ExternalPositioningState.LOW_ACCURACY);
+        } else {
+            motionDnaApplication.setExternalPositioningState(MotionDna.ExternalPositioningState.EXTERNAL_UNDEFINED);
+        }
+    }
+
+    @ReactMethod
+    public void setPowerMode(String powerMode)
+    {
+        if (powerMode.equals("SUPER_LOW_CONSUMPTION")) {
+            motionDnaApplication.setPowerMode(MotionDna.PowerConsumptionMode.SUPER_LOW_CONSUMPTION);
+        }
+        else if (powerMode.equals("LOW_CONSUMPTION")){
+            motionDnaApplication.setPowerMode(MotionDna.PowerConsumptionMode.LOW_CONSUMPTION);
+        }
+        else if (powerMode.equals("MEDIUM_CONSUMPTION")) {
+            motionDnaApplication.setPowerMode(MotionDna.PowerConsumptionMode.MEDIUM_CONSUMPTION);
+        }
+        else if (powerMode.equals("PERFORMANCE")) {
+            motionDnaApplication.setPowerMode(MotionDna.PowerConsumptionMode.PERFORMANCE);
+        }
+    }
+
+
+    @ReactMethod
+    public void resume()
+    {
+        motionDnaApplication.resume();
+    }
+
+    @ReactMethod
+    public void pause()
+    {
+        motionDnaApplication.pause();
+    }
+
+    @ReactMethod
+    public void stop()
+    {
+        motionDnaApplication.stop();
+    }
+
+    @ReactMethod
+    public void resetLocalEstimation()
+    {
+        motionDnaApplication.resetLocalEstimation();
+    }
+
+    @ReactMethod
+    public void resetLocalHeading()
+    {
+        motionDnaApplication.resetLocalHeading();
+    }
+
+    @ReactMethod
+    public void setARMModeEnabled(Boolean mode)
+    {
+        motionDnaApplication.setARModeEnabled(mode);
+    }
+
+    @ReactMethod
+    public void setBinaryFileLoggingEnabled(Boolean state)
+    {
+        motionDnaApplication.setBinaryFileLoggingEnabled(state);
+    }
+
+    @ReactMethod
+    public void setCallbackUpdateRateInMs(Double rate)
+    {
+        motionDnaApplication.setCallbackUpdateRateInMs(rate);
+    }
+
+    @ReactMethod
+    public void setNetworkUpdateRateInMs(Double rate)
+    {
+        motionDnaApplication.setNetworkUpdateRateInMs(rate);
+    }
+
+    @ReactMethod
+    public void setPowerMode(MotionDna.PowerConsumptionMode mode)
+    {
+        motionDnaApplication.setPowerMode(mode);
+    }
+
+    @ReactMethod
+    public void setLocationNavisens()
+    {
+        motionDnaApplication.setLocationNavisens();
+    }
+
+    @ReactMethod
+    public void setLocationGPS()
+    {
+        motionDnaApplication.setLocationGPSOnly();
+    }
+
+    @ReactMethod
+    public void setLocationLatitudeLongitude(Double lat, Double lng)
+    {
+        motionDnaApplication.setLocationLatitudeLongitude(lat,lng);
+    }
+
+    @ReactMethod
+    public void setLocationLatitudeLongitudeAndHeadingInDegrees(Double lat, Double lng, Double angle)
+    {
+        motionDnaApplication.setLocationLatitudeLongitudeAndHeadingInDegrees(lat,lng,angle);
+    }
+
+    @ReactMethod
+    public void setHeadingMagInDegrees()
+    {
+        motionDnaApplication.setHeadingMagInDegrees();
+    }
+
+    @ReactMethod
+    public void setHeadingInDegrees(Double heading)
+    {
+        motionDnaApplication.setHeadingInDegrees(heading);
+    }
+
+    @ReactMethod
+    public void setLocalHeadingOffsetInDegrees(Double degrees)
+    {
+        motionDnaApplication.setLocalHeadingOffsetInDegrees(degrees);
+    }
+
+    @ReactMethod
+    public void startUDP()
+    {
+        motionDnaApplication.startUDP();
+    }
+
+    @ReactMethod
+    public void startUDP(String room)
+    {
+        motionDnaApplication.startUDP(room);
+    }
+
+    @ReactMethod
+    public void stopUDP()
+    {
+        motionDnaApplication.stopUDP();
+    }
+
+    @ReactMethod
+    public void setUDPRoom(String room)
+    {
+        motionDnaApplication.setUDPRoom(room);
+    }
+
+    @ReactMethod
+    public void sendUDPPacket(String msg)
+    {
+        motionDnaApplication.sendUDPPacket(msg);
+    }
+
+    @ReactMethod
+    public void sendUDPQueryRooms(String[] rooms)
+    {
+        motionDnaApplication.sendUDPQueryRooms(rooms);
+    }
+
+    @ReactMethod
+    public void start()
+    {
         motionDnaApplication.setExternalPositioningState(MotionDna.ExternalPositioningState.LOW_ACCURACY);
 //        motionDnaApplication.setLocationAndHeadingGPSMag();
         motionDnaApplication.setLocationLatitudeLongitudeAndHeadingInDegrees(37.787582, -122.396627, 0);
 
         motionDnaApplication.setPowerMode(MotionDna.PowerConsumptionMode.PERFORMANCE);
 //        motionDnaApplication.startUDPHostAndPort("45.79.101.164", "6512");
-        motionDnaApplication.setBinaryFileLoggingEnabled(true);
         motionDnaApplication.setCallbackUpdateRateInMs(100);
 
 //        motionDnaApplication.setARModeEnabled(true);
@@ -97,7 +273,7 @@ public class MotionDnaReactBridge extends ReactContextBaseJavaModule implements 
         motionDnaParameters.putString("motion_motionType",StringFromMotionType(motionDna.getMotion().motionType));
 
         motionDnaParameters.putString("MotionDnaString",str);
-        Log.v("REACT","MotionDNA" + str);
+//        Log.v("REACT","MotionDNA" + str);
         sendEvent(getReactApplicationContext(),"MotionDnaEvent",motionDnaParameters);
 
     }

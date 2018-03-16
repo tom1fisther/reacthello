@@ -49,7 +49,14 @@ export default class App extends Component<Props> {
         // Platform.select({
         // ios: {
         this.motionManager = NativeModules.MotionDnaReactBridge
-        this.motionManager.start()
+        this.motionManager.runMotionDna("4e7485cfe0c552a50112f33c573dca8c4e174786a59a6e407a589aa6d1d71d7a")
+        this.motionManager.setBinaryFileLoggingEnabled(true)
+        this.motionManager.setLocalHeadingOffsetInDegrees(90)
+        this.motionManager.setExternalPositioningState("HIGH_ACCURACY")
+        this.motionManager.setPowerMode("PERFORMANCE");
+        this.motionManager.setCallbackUpdateRateInMs(100)
+        this.motionManager.setNetworkUpdateRateInMs(100)
+        // this.motionManager.start()
         // }
         // android: {
         // }
