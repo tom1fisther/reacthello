@@ -1,6 +1,7 @@
 package com.reactnativehelloagainworld;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
@@ -12,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
-
+static Context context;
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
     @Override
     public boolean getUseDeveloperSupport() {
@@ -22,7 +23,9 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-          new MainReactPackage()
+          new MainReactPackage(),
+          new NavisensReactPackage()
+
       );
     }
 
@@ -40,6 +43,7 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
+    MainApplication.context = getApplicationContext();
     SoLoader.init(this, /* native exopackage */ false);
   }
 }

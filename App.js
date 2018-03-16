@@ -7,12 +7,14 @@
 import React, { Component } from 'react';
 import {NativeEventEmitter, NativeModules} from 'react-native';
 
+// module.exports = NativeModules.MotionDnaReactBridge;
 import {
   Platform,
   StyleSheet,
   Text,
   TextInput,
-  View
+  View,
+  PermissionsAndroid
 } from 'react-native';
 
 motionDNAstring = ""
@@ -41,9 +43,22 @@ export default class App extends Component<Props> {
             location_localHeading: "heading",
             motion_motionType: "nada"
         };
-        console.log("initializing react app")
+        console.log("initialized react app")
+        // requestMotionDnaPermission()
+        // console.log("request permissions")
+        // Platform.select({
+        // ios: {
         this.motionManager = NativeModules.MotionDnaReactBridge
+        this.motionManager.start()
+        // }
+        // android: {
+        // }
+        // });
+        console.log("set bridge")
+
         this.motionDnaEmitter = new NativeEventEmitter(this.motionManager);
+        console.log("set emitter")
+
         this.subscription = this.motionDnaEmitter.addListener(
             'MotionDnaEvent',
             (motionDna) => {
@@ -57,7 +72,8 @@ export default class App extends Component<Props> {
                         });
                 // this.setState({[motionDna.target.id]:motionDna.target.value});
             });
-        
+        console.log("done initializing")
+
         // this.motionManager.setMotionDnaCallback((err, parameter) => 
     }
     
@@ -65,7 +81,7 @@ export default class App extends Component<Props> {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
-          Welcome to the Navisens test!
+          Test!
         </Text>
         <TextInput style={styles.instructions}
         value={this.state.motionDNAstring}
