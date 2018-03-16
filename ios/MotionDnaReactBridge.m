@@ -89,10 +89,11 @@ RCT_EXPORT_MODULE();
 
 RCT_EXPORT_METHOD(runMotionDna:(NSString*)key)
 {
-  _motionDnaManager = [[MotionDnaManager alloc] init];
-  [_motionDnaManager runMotionDna:key];
-  _motionDnaManager.controller = self;
-  
+  dispatch_async(dispatch_get_main_queue(), ^{
+    _motionDnaManager = [[MotionDnaManager alloc] init];
+    [_motionDnaManager runMotionDna:key];
+    _motionDnaManager.controller = self;
+  });
 }
 
 RCT_EXPORT_METHOD(receiveNetworkData:(MotionDna*)motionDna)
