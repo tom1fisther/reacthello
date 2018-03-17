@@ -24,6 +24,37 @@ motionDNAstring = ""
 //     motionDNAstring = parameter
 // }
 
+async function requestNavisensPermission() {
+  try {
+    var granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      {
+        'title': 'Cool Photo App Camera Permission',
+        'message': 'Cool Photo App needs access to your camera ' +
+                   'so you can take awesome pictures.'
+      }
+    )
+    var granted1 = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
+      {
+        'title': 'Cool Photo App Camera Permission',
+        'message': 'Cool Photo App needs access to your camera ' +
+                   'so you can take awesome pictures.'
+      }
+    )
+    var granted2 = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      {
+        'title': 'Cool Photo App Camera Permission',
+        'message': 'Cool Photo App needs access to your camera ' +
+                   'so you can take awesome pictures.'
+      }
+    )
+  } catch (err) {
+    console.warn(err)
+  }
+}
+
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
     'Cmd+D or shake for dev menu',
@@ -35,6 +66,7 @@ type Props = {};
 export default class App extends Component<Props> {
     constructor() {
         super();
+        requestNavisensPermission();
         this.state = {
             motionDNAstring: "test",
             location_localLocation_x: "x",
@@ -44,10 +76,7 @@ export default class App extends Component<Props> {
             motion_motionType: "nada"
         };
         console.log("initialized react app")
-        // requestMotionDnaPermission()
-        // console.log("request permissions")
-        // Platform.select({
-        // ios: {
+
         this.motionManager = NativeModules.MotionDnaReactBridge
         this.motionManager.runMotionDna("4e7485cfe0c552a50112f33c573dca8c4e174786a59a6e407a589aa6d1d71d7a")
         this.motionManager.setBinaryFileLoggingEnabled(true)
@@ -56,12 +85,6 @@ export default class App extends Component<Props> {
         this.motionManager.setPowerMode("PERFORMANCE");
         this.motionManager.setCallbackUpdateRateInMs(100)
         this.motionManager.setNetworkUpdateRateInMs(100)
-        // this.motionManager.start()
-        // }
-        // android: {
-        // }
-        // });
-        console.log("set bridge")
 
         this.motionDnaEmitter = new NativeEventEmitter(this.motionManager);
         console.log("set emitter")
@@ -71,9 +94,9 @@ export default class App extends Component<Props> {
             (motionDna) => {
                 console.log("parameter: " + motionDna.location_localHeading);
                 this.setState({motionDNAstring: motionDna.MotionDnaString,
-                    location_localLocation_x: motionDna.location_localLocation_x.toString(),
-                    location_localLocation_y: motionDna.location_localLocation_y.toString(),
-                    location_localLocation_z: motionDna.location_localLocation_z.toString(),
+                    location_localLocation_x: motionDna.GPSLocation_localLocation_x.toString(),
+                    location_localLocation_y: motionDna.GPSLocation_localLocation_y.toString(),
+                    location_localLocation_z: motionDna.GPSLocation_localLocation_z.toString(),
                     location_localHeading: motionDna.location_localHeading.toString(),
                     motion_motionType: motionDna.motion_motionType
                         });
