@@ -78,7 +78,7 @@ export default class App extends Component<Props> {
         console.log("initialized react app")
 
         this.motionManager = NativeModules.MotionDnaReactBridge
-        this.motionManager.runMotionDna("4e7485cfe0c552a50112f33c573dca8c4e174786a59a6e407a589aa6d1d71d7a")
+        this.motionManager.runMotionDna("<ENTER DEV KEY HERE>")
         this.motionManager.setBinaryFileLoggingEnabled(true)
         this.motionManager.setLocalHeadingOffsetInDegrees(90)
         this.motionManager.setExternalPositioningState("HIGH_ACCURACY")
