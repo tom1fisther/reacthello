@@ -94,9 +94,9 @@ export default class App extends Component<Props> {
             (motionDna) => {
                 console.log("parameter: " + motionDna.location_localHeading);
                 this.setState({motionDNAstring: motionDna.MotionDnaString,
-                    location_localLocation_x: motionDna.GPSLocation_localLocation_x.toString(),
-                    location_localLocation_y: motionDna.GPSLocation_localLocation_y.toString(),
-                    location_localLocation_z: motionDna.GPSLocation_localLocation_z.toString(),
+                    location_localLocation_x: motionDna.location_localLocation_x.toString(),
+                    location_localLocation_y: motionDna.location_localLocation_y.toString(),
+                    location_localLocation_z: motionDna.location_localLocation_z.toString(),
                     location_localHeading: motionDna.location_localHeading.toString(),
                     motion_motionType: motionDna.motion_motionType
                         });
