@@ -1307,6 +1307,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.navisens.native.xample.reactNativeHelloAgainWorld;
 				PRODUCT_NAME = reactNativeHelloAgainWorld;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1327,6 +1328,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.navisens.native.xample.reactNativeHelloAgainWorld;
 				PRODUCT_NAME = reactNativeHelloAgainWorld;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
