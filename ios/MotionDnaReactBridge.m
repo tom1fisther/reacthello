@@ -355,16 +355,6 @@ RCT_EXPORT_METHOD(setPowerMode:(NSString *)mode)
   }
 }
 
-RCT_EXPORT_METHOD(setVehicleModeEnabled:(BOOL)state)
-{
-  [_motionDnaManager setVehicleModeEnabled:state];
-}
-
-RCT_EXPORT_METHOD(setTransportAutoswitchModeEnabled:(BOOL)state)
-{
-  [_motionDnaManager setTransportAutoswitchModeEnabled:state];
-}
-
 RCT_EXPORT_METHOD(setLocalHeadingOffsetInDegrees:(double)hdg)
 {
   [_motionDnaManager setLocalHeadingOffsetInDegrees:hdg];

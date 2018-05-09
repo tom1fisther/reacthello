@@ -660,7 +660,6 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				1E6AC5FA59281CEB7734B3F3 /* [CP] Embed Pods Frameworks */,
-				46D180F7289BE2091B954EAA /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1151,21 +1150,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
-		};
-		46D180F7289BE2091B954EAA /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-reactNativeHelloAgainWorld/Pods-reactNativeHelloAgainWorld-resources.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
 		54F19B184217B3E7B36F6876 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
