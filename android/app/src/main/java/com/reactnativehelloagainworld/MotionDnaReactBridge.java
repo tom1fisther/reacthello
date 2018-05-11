@@ -2,11 +2,13 @@ package com.reactnativehelloagainworld;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
@@ -19,6 +21,8 @@ import com.navisens.motiondnaapi.MotionDnaApplication;
 import com.navisens.motiondnaapi.MotionDnaInterface;
 
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.navisens.motiondnaapi.MotionDna.MotionType.FIDGETING;
 import static com.navisens.motiondnaapi.MotionDna.MotionType.FORWARD;
@@ -30,7 +34,8 @@ import static com.navisens.motiondnaapi.MotionDna.MotionType.STATIONARY;
 
 public class MotionDnaReactBridge extends ReactContextBaseJavaModule implements MotionDnaInterface {
 
-    MotionDnaApplication motionDnaApplication;
+//    MotionDnaApplication motionDnaApplication;
+    MotionDnaSynchronizedApplication motionDnaApplication;
 
     public MotionDnaReactBridge(ReactApplicationContext reactContext) {
         super(reactContext);
