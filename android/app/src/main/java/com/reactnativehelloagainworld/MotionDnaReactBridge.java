@@ -360,6 +360,38 @@ public class MotionDnaReactBridge extends ReactContextBaseJavaModule implements 
 
     @Override
     public void reportError(MotionDna.ErrorCode errorCode, String s) {
+        String errorCodeString = new String();
+        switch (errorCode) {
+            case ERROR_SENSOR_TIMING: {
+                errorCodeString = "ERROR_SENSOR_TIMING";
+                break;
+            }
+            case ERROR_AUTHENTICATION_FAILED: {
+                errorCodeString = "ERROR_AUTHENTICATION_FAILED";
+                break;
+            }
+            case ERROR_SENSOR_MISSING: {
+                errorCodeString = "ERROR_SENSOR_MISSING";
+                break;
+            }
+            case ERROR_SDK_EXPIRED: {
+                errorCodeString = "ERROR_SDK_EXPIRED";
+                break;
+            }
+            case ERROR_WRONG_FLOOR_INPUT: {
+                errorCodeString = "ERROR_WRONG_FLOOR_INPUT";
+                break;
+            }
+            case ERROR_PERMISSIONS: {
+                errorCodeString = "ERROR_PERMISSIONS";
+                break;
+            }
+        }
+        Log.v(getClass().getSimpleName(), "Error: " + errorCodeString + " -- " + s);
+        WritableMap motionDnaErrorParameters = Arguments.createMap();
+        motionDnaErrorParameters.putString("errorCode", errorCodeString);
+        motionDnaErrorParameters.putString("errorString",s);
+        sendEvent(getReactApplicationContext(),"MotionDnaErrorEvent",motionDnaErrorParameters);
 
     }
 

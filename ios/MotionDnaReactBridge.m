@@ -27,7 +27,7 @@ RCT_EXPORT_MODULE();
 
 - (NSArray<NSString *> *)supportedEvents
 {
-  return @[@"MotionDnaEvent"];
+  return @[@"MotionDnaEvent", @"MotionDnaErrorEvent"];
 }
 
 + (BOOL)requiresMainQueueSetup
@@ -105,7 +105,33 @@ RCT_EXPORT_MODULE();
 }
 
 - (void)reportError:(ErrorCode)error WithMessage:(NSString *)message {
-  
+  NSString *errorCodeString;
+  switch (error) {
+    case SENSOR_TIMING: {
+      errorCodeString = @"ERROR_SENSOR_TIMING";
+      break;
+    }
+    case AUTHENTICATION_FAILED: {
+      errorCodeString = @"ERROR_AUTHENTICATION_FAILED";
+      break;
+    }
+    case SENSOR_MISSING: {
+      errorCodeString = @"ERROR_SENSOR_MISSING";
+      break;
+    }
+    case SDK_EXPIRED: {
+      errorCodeString = @"ERROR_SDK_EXPIRED";
+      break;
+    }
+    case WRONG_FLOOR_INPUT: {
+      errorCodeString = @"ERROR_WRONG_FLOOR_INPUT";
+      break;
+    }
+  }
+  NSDictionary *motionDnaErrorDictionary = @{@"errorCode":errorCodeString,
+                                             @"errorString":message};
+  [self sendEventWithName:@"MotionDnaErrorEvent" body:motionDnaErrorDictionary];
+
 }
 
 

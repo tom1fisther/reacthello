@@ -102,8 +102,15 @@ export default class App extends Component<Props> {
                         });
                 // this.setState({[motionDna.target.id]:motionDna.target.value});
             });
-        console.log("done initializing")
 
+          this.errorSubscription = this.motionDnaEmitter.addListener('MotionDnaErrorEvent',(error) => {
+            this.setState({
+              errorCode: error.errorCode,
+              errorString: error.errorString 
+            });
+          });
+        console.log("done initializing")
+        
         // this.motionManager.setMotionDnaCallback((err, parameter) => 
     }
     
