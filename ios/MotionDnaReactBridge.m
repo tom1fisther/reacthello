@@ -27,7 +27,7 @@ RCT_EXPORT_MODULE();
 
 - (NSArray<NSString *> *)supportedEvents
 {
-  return @[@"MotionDnaEvent"];
+  return @[@"MotionDnaEvent", @"MotionDnaErrorEvent"];
 }
 
 + (BOOL)requiresMainQueueSetup
@@ -56,7 +56,7 @@ RCT_EXPORT_MODULE();
   NSString *motionDNAString = [NSString stringWithFormat:@"X:%.2f Y:%.2f Z:%.2f\nHeading:%.2f\nMotion: %@",localLocation.x,localLocation.y,localLocation.z,heading,[self NSStringFromMotionType:motion.motionType]];
 //  NSLog(@"MotionDNA DATA\n%@",motionDNAString);
   NSDictionary *motionDnaDictionary = @{@"MotionDnaString": motionDNAString,
-                                        @"location_locationStatus":@([motionDna getLocation].locationStatus),
+                                        @"location_locationStatus":[self NSStringFromLocationStatus:[motionDna getLocation].locationStatus],
                                         @"location_localLocation_x":@([motionDna getLocation].localLocation.x),
                                         @"location_localLocation_y":@([motionDna getLocation].localLocation.y),
                                         @"location_localLocation_z":@([motionDna getLocation].localLocation.z),
@@ -105,7 +105,33 @@ RCT_EXPORT_MODULE();
 }
 
 - (void)reportError:(ErrorCode)error WithMessage:(NSString *)message {
-  
+  NSString *errorCodeString;
+  switch (error) {
+    case SENSOR_TIMING: {
+      errorCodeString = @"ERROR_SENSOR_TIMING";
+      break;
+    }
+    case AUTHENTICATION_FAILED: {
+      errorCodeString = @"ERROR_AUTHENTICATION_FAILED";
+      break;
+    }
+    case SENSOR_MISSING: {
+      errorCodeString = @"ERROR_SENSOR_MISSING";
+      break;
+    }
+    case SDK_EXPIRED: {
+      errorCodeString = @"ERROR_SDK_EXPIRED";
+      break;
+    }
+    case WRONG_FLOOR_INPUT: {
+      errorCodeString = @"ERROR_WRONG_FLOOR_INPUT";
+      break;
+    }
+  }
+  NSDictionary *motionDnaErrorDictionary = @{@"errorCode":errorCodeString,
+                                             @"errorString":message};
+  [self sendEventWithName:@"MotionDnaErrorEvent" body:motionDnaErrorDictionary];
+
 }
 
 
@@ -125,12 +151,31 @@ RCT_EXPORT_MODULE();
   return nil;
 }
 
-RCT_EXPORT_METHOD(runMotionDna:(NSString*)key)
+- (NSString *)NSStringFromLocationStatus:(LocationStatus)ls {
+  switch (ls) {
+    case NAVISENS_INITIALIZED:
+      return @"NAVISENS_INITIALIZED";
+    case NAVISENS_INITIALIZING:
+      return @"NAVISENS_INITIALIZING";
+    case GPS_INITIALIZED:
+      return @"GPS_INITIALIZED";
+    case USER_INITIALIZED:
+      return @"USER_INITIALIZED";
+    case UNINITIALIZED:
+      return @"UNINITIALIZED";
+    default:
+      break;
+  }
+  return nil;
+}
+
+RCT_EXPORT_METHOD(runMotionDna:(NSString*)key callback:(RCTResponseSenderBlock)initializationCallback)
 {
   dispatch_async(dispatch_get_main_queue(), ^{
     _motionDnaManager = [[MotionDnaManager alloc] init];
     [_motionDnaManager runMotionDna:key];
     _motionDnaManager.controller = self;
+    initializationCallback(@[[NSNull null]]);
   });
 }
 
@@ -222,6 +267,7 @@ RCT_EXPORT_METHOD(setMapCorrectionEnabled:(BOOL)state)
 
 RCT_EXPORT_METHOD(setCallbackUpdateRateInMs:(double)rate)
 {
+  printf("Callback update rate: %0.2f\n",rate);
   [_motionDnaManager setCallbackUpdateRateInMs:rate];
 }
 
@@ -355,16 +401,6 @@ RCT_EXPORT_METHOD(setPowerMode:(NSString *)mode)
   }
 }
 
-RCT_EXPORT_METHOD(setVehicleModeEnabled:(BOOL)state)
-{
-  [_motionDnaManager setVehicleModeEnabled:state];
-}
-
-RCT_EXPORT_METHOD(setTransportAutoswitchModeEnabled:(BOOL)state)
-{
-  [_motionDnaManager setTransportAutoswitchModeEnabled:state];
-}
-
 RCT_EXPORT_METHOD(setLocalHeadingOffsetInDegrees:(double)hdg)
 {
   [_motionDnaManager setLocalHeadingOffsetInDegrees:hdg];
@@ -401,10 +437,10 @@ RCT_EXPORT_METHOD(start)
   //[_motionDnaManager setLocationNavisens];
   //    [_motionDnaManager setExternalPositioningState:LOW_ACCURACY];
   
-  [_motionDnaManager setBackgroundModeEnabled:YES];
-  [_motionDnaManager setCallbackUpdateRateInMs:100];
-  [_motionDnaManager setNetworkUpdateRateInMs:100];
-  [_motionDnaManager setExternalPositioningState:HIGH_ACCURACY];
+//  [_motionDnaManager setBackgroundModeEnabled:YES];
+//  [_motionDnaManager setCallbackUpdateRateInMs:100];
+//  [_motionDnaManager setNetworkUpdateRateInMs:100];
+//  [_motionDnaManager setExternalPositioningState:HIGH_ACCURACY];
 }
 
 @end

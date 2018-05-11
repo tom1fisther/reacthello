@@ -2,11 +2,13 @@ package com.reactnativehelloagainworld;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
@@ -19,6 +21,8 @@ import com.navisens.motiondnaapi.MotionDnaApplication;
 import com.navisens.motiondnaapi.MotionDnaInterface;
 
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.navisens.motiondnaapi.MotionDna.MotionType.FIDGETING;
 import static com.navisens.motiondnaapi.MotionDna.MotionType.FORWARD;
@@ -30,7 +34,8 @@ import static com.navisens.motiondnaapi.MotionDna.MotionType.STATIONARY;
 
 public class MotionDnaReactBridge extends ReactContextBaseJavaModule implements MotionDnaInterface {
 
-    MotionDnaApplication motionDnaApplication;
+//    MotionDnaApplication motionDnaApplication;
+    MotionDnaSynchronizedApplication motionDnaApplication;
 
     public MotionDnaReactBridge(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -39,10 +44,26 @@ public class MotionDnaReactBridge extends ReactContextBaseJavaModule implements 
     }
 
     @ReactMethod
-    public void runMotionDna(String key)
+    public void runMotionDna(final String key, final Callback initializationCallback)
     {
-        motionDnaApplication = new MotionDnaApplication(this);
-        motionDnaApplication.runMotionDna(key);
+        Handler NavisensHandler = new Handler(Looper.getMainLooper());
+        NavisensHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                //        motionDnaApplication = new MotionDnaApplication(this);
+                motionDnaApplication = new MotionDnaSynchronizedApplication(MotionDnaReactBridge.this);
+                motionDnaApplication.runMotionDna(key);
+
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        initializationCallback.invoke();
+                    }
+                },1000);
+            }
+        });
+
     }
 
     @ReactMethod
@@ -267,7 +288,7 @@ public class MotionDnaReactBridge extends ReactContextBaseJavaModule implements 
 
         WritableMap motionDnaParameters = Arguments.createMap();
         motionDnaParameters.putString("MotionDnaString",str);
-        motionDnaParameters.putInt("location_locationStatus",motionDna.getLocation().locationStatus.ordinal());
+        motionDnaParameters.putString("location_locationStatus",StringFromLocationStatus(motionDna.getLocation().locationStatus));
         motionDnaParameters.putDouble("location_localLocation_x",motionDna.getLocation().localLocation.x);
         motionDnaParameters.putDouble("location_localLocation_y",motionDna.getLocation().localLocation.y);
         motionDnaParameters.putDouble("location_localLocation_z",motionDna.getLocation().localLocation.z);
@@ -330,6 +351,24 @@ public class MotionDnaReactBridge extends ReactContextBaseJavaModule implements 
         return "";
     }
 
+    private String StringFromLocationStatus(MotionDna.LocationStatus ls) {
+        switch (ls) {
+            case NAVISENS_INITIALIZED:
+                return "NAVISENS_INITIALIZED";
+            case NAVISENS_INITIALIZING:
+                return "NAVISENS_INITIALIZING";
+            case GPS_INITIALIZED:
+                return "GPS_INITIALIZED";
+            case USER_INITIALIZED:
+                return "USER_INITIALIZED";
+            case UNINITIALIZED:
+                return "UNINITIALIZED";
+            default:
+                return "DEFAULT";
+        }
+//        return "";
+    }
+
     @Override
     public Context getAppContext() {
         return getReactApplicationContext();
@@ -342,6 +381,38 @@ public class MotionDnaReactBridge extends ReactContextBaseJavaModule implements 
 
     @Override
     public void reportError(MotionDna.ErrorCode errorCode, String s) {
+        String errorCodeString = new String();
+        switch (errorCode) {
+            case ERROR_SENSOR_TIMING: {
+                errorCodeString = "ERROR_SENSOR_TIMING";
+                break;
+            }
+            case ERROR_AUTHENTICATION_FAILED: {
+                errorCodeString = "ERROR_AUTHENTICATION_FAILED";
+                break;
+            }
+            case ERROR_SENSOR_MISSING: {
+                errorCodeString = "ERROR_SENSOR_MISSING";
+                break;
+            }
+            case ERROR_SDK_EXPIRED: {
+                errorCodeString = "ERROR_SDK_EXPIRED";
+                break;
+            }
+            case ERROR_WRONG_FLOOR_INPUT: {
+                errorCodeString = "ERROR_WRONG_FLOOR_INPUT";
+                break;
+            }
+            case ERROR_PERMISSIONS: {
+                errorCodeString = "ERROR_PERMISSIONS";
+                break;
+            }
+        }
+        Log.v(getClass().getSimpleName(), "Error: " + errorCodeString + " -- " + s);
+        WritableMap motionDnaErrorParameters = Arguments.createMap();
+        motionDnaErrorParameters.putString("errorCode", errorCodeString);
+        motionDnaErrorParameters.putString("errorString",s);
+        sendEvent(getReactApplicationContext(),"MotionDnaErrorEvent",motionDnaErrorParameters);
 
     }
 

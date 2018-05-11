@@ -6,6 +6,13 @@
 
 import React, { Component } from 'react';
 import {NativeEventEmitter, NativeModules} from 'react-native';
+// import MessageQueue from 'react-native/Libraries/BatchedBridge/MessageQueue.js';
+
+// const spyFunction = (msg) => {
+//   console.log(msg);
+// };
+
+// MessageQueue.spy(spyFunction);
 
 // module.exports = NativeModules.MotionDnaReactBridge;
 import {
@@ -25,35 +32,35 @@ motionDNAstring = ""
 // }
 
 async function requestNavisensPermission() {
-  try {
-    var granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-      {
-        'title': 'Cool Photo App Camera Permission',
-        'message': 'Cool Photo App needs access to your camera ' +
-                   'so you can take awesome pictures.'
+  if(Platform.OS === 'android') {
+    try {
+        var granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            'title': 'Fine Location Permission',
+            'message': 'This location API needs your location'
+          }
+        )
+        var granted1 = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
+          {
+            'title': 'Coarse Location Permission',
+            'message': 'This location API needs your location'
+          }
+        )
+        var granted2 = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            'title': 'Log File Storage Permission',
+            'message': 'This app needs external storage permissions' + 
+                      ' to record log files if you enable that feature'
+          }
+        )
+      } catch (err) {
+        console.warn(err)
       }
-    )
-    var granted1 = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
-      {
-        'title': 'Cool Photo App Camera Permission',
-        'message': 'Cool Photo App needs access to your camera ' +
-                   'so you can take awesome pictures.'
-      }
-    )
-    var granted2 = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-      {
-        'title': 'Cool Photo App Camera Permission',
-        'message': 'Cool Photo App needs access to your camera ' +
-                   'so you can take awesome pictures.'
-      }
-    )
-  } catch (err) {
-    console.warn(err)
-  }
-}
+    }
+  } 
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
@@ -66,25 +73,41 @@ type Props = {};
 export default class App extends Component<Props> {
     constructor() {
         super();
-        requestNavisensPermission();
+        // requestNavisensPermission();
         this.state = {
             motionDNAstring: "test",
+            locationStatus: "UNKNOWN",
             location_localLocation_x: "x",
             location_localLocation_z: "y",
             location_localLocation_y: "z",
+            location_globalLocation_latitude: "20",
+            location_globalLocation_longitude: "30",
+            location_globalLocation_altitude: "40",
             location_localHeading: "heading",
-            motion_motionType: "nada"
+            motion_motionType: "nada",
+            navidate: "0",
+            errorCode: "NO ERROR CODE",
+            errorString: "NO ERROR STRING"
         };
         console.log("initialized react app")
 
         this.motionManager = NativeModules.MotionDnaReactBridge
-        this.motionManager.runMotionDna("<ENTER DEV KEY HERE>")
-        this.motionManager.setBinaryFileLoggingEnabled(true)
-        this.motionManager.setLocalHeadingOffsetInDegrees(90)
-        this.motionManager.setExternalPositioningState("HIGH_ACCURACY")
-        this.motionManager.setPowerMode("PERFORMANCE");
-        this.motionManager.setCallbackUpdateRateInMs(100)
-        this.motionManager.setNetworkUpdateRateInMs(100)
+        this.motionManager.runMotionDna("4e7485cfe0c552a50112f33c573dca8c4e174786a59a6e407a589aa6d1d71d7a",() => {
+          // this.motionManager.setBinaryFileLoggingEnabled(true)
+          // this.motionManager.setLocalHeadingOffsetInDegrees(90)
+
+          this.motionManager.setLocationNavisens();
+          this.motionManager.setExternalPositioningState("HIGH_ACCURACY")
+          this.motionManager.setPowerMode("PERFORMANCE");
+          this.motionManager.setLocationNavisens();
+
+          this.motionManager.setCallbackUpdateRateInMs(500)
+          this.motionManager.setLocationNavisens();
+          this.motionManager.setLocationGPS();
+
+          //this.motionManager.setNetworkUpdateRateInMs(100)
+          this.motionManager.setLocationNavisens();
+        });
 
         this.motionDnaEmitter = new NativeEventEmitter(this.motionManager);
         console.log("set emitter")
@@ -92,18 +115,31 @@ export default class App extends Component<Props> {
         this.subscription = this.motionDnaEmitter.addListener(
             'MotionDnaEvent',
             (motionDna) => {
-                console.log("parameter: " + motionDna.location_localHeading);
+                // console.log("parameter: " + motionDna.location_localHeading);
                 this.setState({motionDNAstring: motionDna.MotionDnaString,
-                    location_localLocation_x: motionDna.location_localLocation_x.toString(),
-                    location_localLocation_y: motionDna.location_localLocation_y.toString(),
-                    location_localLocation_z: motionDna.location_localLocation_z.toString(),
-                    location_localHeading: motionDna.location_localHeading.toString(),
-                    motion_motionType: motionDna.motion_motionType
+                  locationStatus: motionDna.location_locationStatus,
+                    location_localLocation_x: motionDna.location_localLocation_x.toFixed(3),
+                    location_localLocation_y: motionDna.location_localLocation_y.toFixed(3),
+                    location_localLocation_z: motionDna.location_localLocation_z.toFixed(3),
+                    location_globalLocation_latitude: motionDna.location_globalLocation_latitude.toFixed(5),
+                    location_globalLocation_longitude: motionDna.location_globalLocation_longitude.toFixed(5),
+                    location_globalLocation_altitude: motionDna.location_globalLocation_altitude.toFixed(3),
+                    location_localHeading: motionDna.location_localHeading.toFixed(3),
+                    motion_motionType: motionDna.motion_motionType,
+                    navidate: Date.now().toString()
                         });
+                        // console.log(this.state.navidate)
                 // this.setState({[motionDna.target.id]:motionDna.target.value});
             });
-        console.log("done initializing")
 
+          this.errorSubscription = this.motionDnaEmitter.addListener('MotionDnaErrorEvent',(error) => {
+            this.setState({
+              errorCode: error.errorCode,
+              errorString: error.errorString 
+            });
+          });
+        console.log("done initializing")
+        
         // this.motionManager.setMotionDnaCallback((err, parameter) => 
     }
     
@@ -113,24 +149,36 @@ export default class App extends Component<Props> {
         <Text style={styles.welcome}>
           Test!
         </Text>
-        <TextInput style={styles.instructions}
+        {/* <TextInput style={styles.instructions}
         value={this.state.motionDNAstring}
-        />
-        <TextInput style={styles.instructions}
-        value={this.state.location_localLocation_x}
-        />
-        <TextInput style={styles.instructions}
-        value={this.state.location_localLocation_z}
-        />
-        <TextInput style={styles.instructions}
-        value={this.state.location_localLocation_y}
-        />
-        <TextInput style={styles.instructions}
-        value={this.state.location_localHeading}
-        />
-        <TextInput style={styles.instructions}
-        value={this.state.motion_motionType}
-        />
+        /> */}
+        <Text style={styles.instructions}>
+        {"X: " + this.state.location_localLocation_x + " Y: " + this.state.location_localLocation_y + " Z: " + this.state.location_localLocation_z}
+        </Text>
+        <Text style={styles.instructions}>
+        {"Lat: " + this.state.location_globalLocation_latitude + " Long: " + this.state.location_globalLocation_longitude + " Alt: " + this.state.location_globalLocation_altitude}
+        </Text>
+        <Text style={styles.instructions}>
+        {"UNUSED"}
+        </Text>
+        <Text style={styles.instructions}>
+        {this.state.location_localHeading}
+        </Text>
+        <Text style={styles.instructions}>
+        {this.state.motion_motionType}
+        </Text>
+        <Text style={styles.instructions}>
+        {this.state.navidate}
+        </Text>
+        <Text style={styles.instructions}>
+        {this.state.errorCode}
+        </Text>
+        <Text style={styles.instructions}>
+        {this.state.errorString}
+        </Text>
+        <Text style={styles.instructions}>
+        {this.state.locationStatus}
+        </Text>
         <Text style={styles.instructions}>
           {instructions}
         </Text>
