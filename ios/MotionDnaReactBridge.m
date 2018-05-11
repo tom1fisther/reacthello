@@ -169,11 +169,13 @@ RCT_EXPORT_MODULE();
   return nil;
 }
 
+RCT_EXPORT_METHOD(runMotionDna:(NSString*)key callback:(RCTResponseSenderBlock)initializationCallback)
 {
   dispatch_async(dispatch_get_main_queue(), ^{
     _motionDnaManager = [[MotionDnaManager alloc] init];
     [_motionDnaManager runMotionDna:key];
     _motionDnaManager.controller = self;
+    initializationCallback(@[[NSNull null]]);
   });
 }
 
@@ -265,6 +267,7 @@ RCT_EXPORT_METHOD(setMapCorrectionEnabled:(BOOL)state)
 
 RCT_EXPORT_METHOD(setCallbackUpdateRateInMs:(double)rate)
 {
+  printf("Callback update rate: %0.2f\n",rate);
   [_motionDnaManager setCallbackUpdateRateInMs:rate];
 }
 
@@ -434,10 +437,10 @@ RCT_EXPORT_METHOD(start)
   //[_motionDnaManager setLocationNavisens];
   //    [_motionDnaManager setExternalPositioningState:LOW_ACCURACY];
   
-  [_motionDnaManager setBackgroundModeEnabled:YES];
-  [_motionDnaManager setCallbackUpdateRateInMs:100];
-  [_motionDnaManager setNetworkUpdateRateInMs:100];
-  [_motionDnaManager setExternalPositioningState:HIGH_ACCURACY];
+//  [_motionDnaManager setBackgroundModeEnabled:YES];
+//  [_motionDnaManager setCallbackUpdateRateInMs:100];
+//  [_motionDnaManager setNetworkUpdateRateInMs:100];
+//  [_motionDnaManager setExternalPositioningState:HIGH_ACCURACY];
 }
 
 @end

@@ -39,10 +39,26 @@ public class MotionDnaReactBridge extends ReactContextBaseJavaModule implements 
     }
 
     @ReactMethod
-    public void runMotionDna(String key)
+    public void runMotionDna(final String key, final Callback initializationCallback)
     {
-        motionDnaApplication = new MotionDnaApplication(this);
-        motionDnaApplication.runMotionDna(key);
+        Handler NavisensHandler = new Handler(Looper.getMainLooper());
+        NavisensHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                //        motionDnaApplication = new MotionDnaApplication(this);
+                motionDnaApplication = new MotionDnaSynchronizedApplication(MotionDnaReactBridge.this);
+                motionDnaApplication.runMotionDna(key);
+
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        initializationCallback.invoke();
+                    }
+                },1000);
+            }
+        });
+
     }
 
     @ReactMethod
