@@ -267,7 +267,7 @@ public class MotionDnaReactBridge extends ReactContextBaseJavaModule implements 
 
         WritableMap motionDnaParameters = Arguments.createMap();
         motionDnaParameters.putString("MotionDnaString",str);
-        motionDnaParameters.putInt("location_locationStatus",motionDna.getLocation().locationStatus.ordinal());
+        motionDnaParameters.putString("location_locationStatus",StringFromLocationStatus(motionDna.getLocation().locationStatus));
         motionDnaParameters.putDouble("location_localLocation_x",motionDna.getLocation().localLocation.x);
         motionDnaParameters.putDouble("location_localLocation_y",motionDna.getLocation().localLocation.y);
         motionDnaParameters.putDouble("location_localLocation_z",motionDna.getLocation().localLocation.z);
@@ -328,6 +328,24 @@ public class MotionDnaReactBridge extends ReactContextBaseJavaModule implements 
                 break;
         }
         return "";
+    }
+
+    private String StringFromLocationStatus(MotionDna.LocationStatus ls) {
+        switch (ls) {
+            case NAVISENS_INITIALIZED:
+                return "NAVISENS_INITIALIZED";
+            case NAVISENS_INITIALIZING:
+                return "NAVISENS_INITIALIZING";
+            case GPS_INITIALIZED:
+                return "GPS_INITIALIZED";
+            case USER_INITIALIZED:
+                return "USER_INITIALIZED";
+            case UNINITIALIZED:
+                return "UNINITIALIZED";
+            default:
+                return "DEFAULT";
+        }
+//        return "";
     }
 
     @Override

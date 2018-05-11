@@ -56,7 +56,7 @@ RCT_EXPORT_MODULE();
   NSString *motionDNAString = [NSString stringWithFormat:@"X:%.2f Y:%.2f Z:%.2f\nHeading:%.2f\nMotion: %@",localLocation.x,localLocation.y,localLocation.z,heading,[self NSStringFromMotionType:motion.motionType]];
 //  NSLog(@"MotionDNA DATA\n%@",motionDNAString);
   NSDictionary *motionDnaDictionary = @{@"MotionDnaString": motionDNAString,
-                                        @"location_locationStatus":@([motionDna getLocation].locationStatus),
+                                        @"location_locationStatus":[self NSStringFromLocationStatus:[motionDna getLocation].locationStatus],
                                         @"location_localLocation_x":@([motionDna getLocation].localLocation.x),
                                         @"location_localLocation_y":@([motionDna getLocation].localLocation.y),
                                         @"location_localLocation_z":@([motionDna getLocation].localLocation.z),
@@ -125,7 +125,24 @@ RCT_EXPORT_MODULE();
   return nil;
 }
 
-RCT_EXPORT_METHOD(runMotionDna:(NSString*)key)
+- (NSString *)NSStringFromLocationStatus:(LocationStatus)ls {
+  switch (ls) {
+    case NAVISENS_INITIALIZED:
+      return @"NAVISENS_INITIALIZED";
+    case NAVISENS_INITIALIZING:
+      return @"NAVISENS_INITIALIZING";
+    case GPS_INITIALIZED:
+      return @"GPS_INITIALIZED";
+    case USER_INITIALIZED:
+      return @"USER_INITIALIZED";
+    case UNINITIALIZED:
+      return @"UNINITIALIZED";
+    default:
+      break;
+  }
+  return nil;
+}
+
 {
   dispatch_async(dispatch_get_main_queue(), ^{
     _motionDnaManager = [[MotionDnaManager alloc] init];
