@@ -130,7 +130,7 @@ export default class App extends Component<Props> {
                     gpsLocation_globalLocation_latitude: motionDna.GPSLocation_globalLocation_latitude.toFixed(5),
                     gpsLocation_globalLocation_longitude: motionDna.GPSLocation_globalLocation_longitude.toFixed(5),
                     gpsLocation_globalLocation_altitude: motionDna.GPSLocation_globalLocation_altitude.toFixed(3),
-                    navidate: Date.now().toString()
+                    navidate: motionDna.timestamp.toString()
                         });
                         // console.log(this.state.navidate)
                 // this.setState({[motionDna.target.id]:motionDna.target.value});

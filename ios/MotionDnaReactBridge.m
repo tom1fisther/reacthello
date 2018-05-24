@@ -98,7 +98,9 @@ RCT_EXPORT_MODULE();
                                         @"quaternion_x":@([motionDna getQuaternion].x),
                                         @"quaternion_y":@([motionDna getQuaternion].y),
                                         @"quaternion_z":@([motionDna getQuaternion].z),
-                                        @"quaternion_w":@([motionDna getQuaternion].w)
+                                        @"quaternion_w":@([motionDna getQuaternion].w),
+                                        @"timestamp":@([motionDna getTimestamp])
+
                                         };
   [self sendEventWithName:@"MotionDnaEvent" body:motionDnaDictionary];
 

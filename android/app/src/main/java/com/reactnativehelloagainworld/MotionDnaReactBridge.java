@@ -336,8 +336,7 @@ public class MotionDnaReactBridge extends ReactContextBaseJavaModule implements 
         motionDnaParameters.putDouble("quaternion_y",motionDna.getOrientationQuaternion().y);
         motionDnaParameters.putDouble("quaternion_z",motionDna.getOrientationQuaternion().z);
         motionDnaParameters.putDouble("quaternion_w",motionDna.getOrientationQuaternion().w);
-        motionDnaParameters.putString("MotionDnaString",str);
-//        Log.v("REACT","MotionDNA" + str);
+        motionDnaParameters.putDouble("timestamp",motionDna.getTimestamp());
         sendEvent(getReactApplicationContext(),"MotionDnaEvent",motionDnaParameters);
 
     }
