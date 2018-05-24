@@ -19,7 +19,7 @@ public class MotionDnaSynchronizedApplication extends MotionDnaApplication {
 
     public synchronized void setExternalPositioningState(MotionDna.ExternalPositioningState state)
     {
-        super.setExternalPositioningState(MotionDna.ExternalPositioningState.OFF);
+        super.setExternalPositioningState(state);
     }
 
 
