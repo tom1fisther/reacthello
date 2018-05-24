@@ -73,18 +73,21 @@ type Props = {};
 export default class App extends Component<Props> {
     constructor() {
         super();
-        // requestNavisensPermission();
+        requestNavisensPermission();
         this.state = {
             motionDNAstring: "test",
             locationStatus: "UNKNOWN",
             location_localLocation_x: "x",
             location_localLocation_z: "y",
             location_localLocation_y: "z",
-            location_globalLocation_latitude: "20",
-            location_globalLocation_longitude: "30",
-            location_globalLocation_altitude: "40",
+            location_globalLocation_latitude: "lat",
+            location_globalLocation_longitude: "long",
+            location_globalLocation_altitude: "alt",
             location_localHeading: "heading",
             motion_motionType: "nada",
+            gpsLocation_globalLocation_latitude: "lat",
+            gpsLocation_globalLocation_longitude: "long",
+            gpsLocation_globalLocation_altitude: "alt",
             navidate: "0",
             errorCode: "NO ERROR CODE",
             errorString: "NO ERROR STRING"
@@ -93,20 +96,18 @@ export default class App extends Component<Props> {
 
         this.motionManager = NativeModules.MotionDnaReactBridge
         this.motionManager.runMotionDna("4e7485cfe0c552a50112f33c573dca8c4e174786a59a6e407a589aa6d1d71d7a",() => {
+          this.motionManager.setLocationNavisens();
+          // this.motionManager.setLocationGPSOnly();
           // this.motionManager.setBinaryFileLoggingEnabled(true)
           // this.motionManager.setLocalHeadingOffsetInDegrees(90)
 
-          this.motionManager.setLocationNavisens();
           this.motionManager.setExternalPositioningState("HIGH_ACCURACY")
           this.motionManager.setPowerMode("PERFORMANCE");
-          this.motionManager.setLocationNavisens();
 
-          this.motionManager.setCallbackUpdateRateInMs(500)
-          this.motionManager.setLocationNavisens();
-          this.motionManager.setLocationGPS();
+          this.motionManager.setCallbackUpdateRateInMs(2000)
+
 
           //this.motionManager.setNetworkUpdateRateInMs(100)
-          this.motionManager.setLocationNavisens();
         });
 
         this.motionDnaEmitter = new NativeEventEmitter(this.motionManager);
@@ -126,6 +127,9 @@ export default class App extends Component<Props> {
                     location_globalLocation_altitude: motionDna.location_globalLocation_altitude.toFixed(3),
                     location_localHeading: motionDna.location_localHeading.toFixed(3),
                     motion_motionType: motionDna.motion_motionType,
+                    gpsLocation_globalLocation_latitude: motionDna.GPSLocation_globalLocation_latitude.toFixed(5),
+                    gpsLocation_globalLocation_longitude: motionDna.GPSLocation_globalLocation_longitude.toFixed(5),
+                    gpsLocation_globalLocation_altitude: motionDna.GPSLocation_globalLocation_altitude.toFixed(3),
                     navidate: Date.now().toString()
                         });
                         // console.log(this.state.navidate)
@@ -156,10 +160,16 @@ export default class App extends Component<Props> {
         {"X: " + this.state.location_localLocation_x + " Y: " + this.state.location_localLocation_y + " Z: " + this.state.location_localLocation_z}
         </Text>
         <Text style={styles.instructions}>
+        {"NAVISENS LOCATION"}
+        </Text>
+        <Text style={styles.instructions}>
         {"Lat: " + this.state.location_globalLocation_latitude + " Long: " + this.state.location_globalLocation_longitude + " Alt: " + this.state.location_globalLocation_altitude}
         </Text>
         <Text style={styles.instructions}>
-        {"UNUSED"}
+        {"GPS LOCATION"}
+        </Text>
+        <Text style={styles.instructions}>
+        {"Lat: " + this.state.gpsLocation_globalLocation_latitude + " Long: " + this.state.gpsLocation_globalLocation_longitude + " Alt: " + this.state.gpsLocation_globalLocation_altitude}
         </Text>
         <Text style={styles.instructions}>
         {this.state.location_localHeading}
