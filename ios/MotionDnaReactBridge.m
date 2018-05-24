@@ -281,6 +281,12 @@ RCT_EXPORT_METHOD(setBinaryFileLoggingEnabled:(BOOL)state)
   [_motionDnaManager setBinaryFileLoggingEnabled:state];
 }
 
+RCT_EXPORT_METHOD(setBackpropagationEnabled:(BOOL)state)
+{
+  [_motionDnaManager setBackpropagationEnabled:state];
+}
+
+
 RCT_EXPORT_METHOD(setExternalPositioningState:(NSString*)state)
 {
 //  OFF,

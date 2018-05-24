@@ -103,7 +103,7 @@ export default class App extends Component<Props> {
 
           this.motionManager.setExternalPositioningState("HIGH_ACCURACY")
           this.motionManager.setPowerMode("PERFORMANCE");
-
+          this.motionManager.setBackpropagationEnabled(true);
           this.motionManager.setCallbackUpdateRateInMs(2000)
 
 

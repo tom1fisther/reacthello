@@ -64,6 +64,9 @@ public class MotionDnaSynchronizedApplication extends MotionDnaApplication {
         super.setBinaryFileLoggingEnabled(state);
     }
 
+    public synchronized void setBackpropagationEnabled(Boolean state) {
+        super.setBackpropagationEnabled(state);
+    }
 
     public synchronized void setCallbackUpdateRateInMs(Double rate)
     {
