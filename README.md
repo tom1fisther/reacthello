@@ -54,7 +54,7 @@ __For Android__
 ```
 react-native run-android
 ```
-Be sure you have the android platform-tools in your PATH environment variable so that react can access tools like adb to run your app. You may need to setup a virutal device first if you wish to use the simulator.
+Be sure you have the android platform-tools in your PATH environment variable so that react can access tools like adb to run your app. You may need to setup a virtual device first if you wish to use the simulator.
 
 You may also run either app by using the standard build and run tools in each platforms respective IDE
 
