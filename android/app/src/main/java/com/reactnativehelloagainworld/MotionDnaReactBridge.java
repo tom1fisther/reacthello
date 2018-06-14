@@ -148,6 +148,11 @@ public class MotionDnaReactBridge extends ReactContextBaseJavaModule implements 
     }
 
     @ReactMethod
+    public void setBackpropagationBufferSize(int backPropBufferSize) {
+        motionDnaApplication.setBackpropagationBufferSize(backPropBufferSize);
+    }
+
+    @ReactMethod
     public void setCallbackUpdateRateInMs(Double rate)
     {
         motionDnaApplication.setCallbackUpdateRateInMs(rate);

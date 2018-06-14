@@ -288,6 +288,10 @@ RCT_EXPORT_METHOD(setBackpropagationEnabled:(BOOL)state)
   [_motionDnaManager setBackpropagationEnabled:state];
 }
 
+RCT_EXPORT_METHOD(setBackpropagationBufferSize:(NSInteger)backPropBufferSize)
+{
+  [_motionDnaManager setBackpropagationBufferSize:backPropBufferSize];
+}
 
 RCT_EXPORT_METHOD(setExternalPositioningState:(NSString*)state)
 {

@@ -68,6 +68,10 @@ public class MotionDnaSynchronizedApplication extends MotionDnaApplication {
         super.setBackpropagationEnabled(state);
     }
 
+    public synchronized void setBackpropagationBufferSize(int backPropBufferSize) {
+        super.setBackpropagationBufferSize(backPropBufferSize);
+    }
+
     public synchronized void setCallbackUpdateRateInMs(Double rate)
     {
         super.setCallbackUpdateRateInMs(rate);
