@@ -332,9 +332,6 @@ public class MotionDnaReactBridge extends ReactContextBaseJavaModule implements 
         motionDnaParameters.putDouble("motionStatistics_dwelling",motionDna.getMotionStatistics().dwelling);
         motionDnaParameters.putDouble("motionStatistics_walking",motionDna.getMotionStatistics().walking);
         motionDnaParameters.putDouble("motionStatistics_stationary",motionDna.getMotionStatistics().stationary);
-        motionDnaParameters.putDouble("polygonMotionStatistics_dwelling",motionDna.getPolygonMotionStatistics().dwelling);
-        motionDnaParameters.putDouble("polygonMotionStatistics_walking",motionDna.getPolygonMotionStatistics().walking);
-        motionDnaParameters.putDouble("polygonMotionStatistics_stationary",motionDna.getPolygonMotionStatistics().stationary);
         motionDnaParameters.putString("ID",motionDna.getID());
         motionDnaParameters.putString("deviceName",motionDna.getDeviceName());
         motionDnaParameters.putDouble("quaternion_x",motionDna.getOrientationQuaternion().x);
@@ -366,10 +363,6 @@ public class MotionDnaReactBridge extends ReactContextBaseJavaModule implements 
                 return "NAVISENS_INITIALIZED";
             case NAVISENS_INITIALIZING:
                 return "NAVISENS_INITIALIZING";
-            case GPS_INITIALIZED:
-                return "GPS_INITIALIZED";
-            case USER_INITIALIZED:
-                return "USER_INITIALIZED";
             case UNINITIALIZED:
                 return "UNINITIALIZED";
             default:

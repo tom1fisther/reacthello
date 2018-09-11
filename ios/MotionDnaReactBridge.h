@@ -13,7 +13,7 @@
 #import "MotionDnaManager.h"
 
 @interface MotionDnaReactBridge : RCTEventEmitter<RCTBridgeModule,MotionDnaDelegate>
-@property (strong, nonatomic) MotionDnaManager *motionDnaManager;
++ (MotionDnaManager *)sharedMDNAManager;
 - (instancetype)init;
 + (BOOL)requiresMainQueueSetup;
 

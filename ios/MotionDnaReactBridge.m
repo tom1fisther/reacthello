@@ -10,6 +10,11 @@
 
 @implementation MotionDnaReactBridge
 RCT_EXPORT_MODULE();
+static MotionDnaManager *_motionDnaManager;
+
++ (MotionDnaManager *)sharedMDNAManager {
+  return _motionDnaManager;
+}
 
 - (instancetype)init {
   if (self = [super init]) {
@@ -90,9 +95,6 @@ RCT_EXPORT_MODULE();
                                         @"motionStatistics_dwelling":@([motionDna getMotionStatistics].dwelling),
                                         @"motionStatistics_walking":@([motionDna getMotionStatistics].walking),
                                         @"motionStatistics_stationary":@([motionDna getMotionStatistics].stationary),
-                                        @"polygonMotionStatistics_dwelling":@([motionDna getPolygonMotionStatistics].dwelling),
-                                        @"polygonMotionStatistics_walking":@([motionDna getPolygonMotionStatistics].walking),
-                                        @"polygonMotionStatistics_stationary":@([motionDna getPolygonMotionStatistics].stationary),
                                         @"ID":[motionDna getID],
                                         @"deviceName":[motionDna getDeviceName],
                                         @"quaternion_x":@([motionDna getQuaternion].x),
@@ -159,10 +161,6 @@ RCT_EXPORT_MODULE();
       return @"NAVISENS_INITIALIZED";
     case NAVISENS_INITIALIZING:
       return @"NAVISENS_INITIALIZING";
-    case GPS_INITIALIZED:
-      return @"GPS_INITIALIZED";
-    case USER_INITIALIZED:
-      return @"USER_INITIALIZED";
     case UNINITIALIZED:
       return @"UNINITIALIZED";
     default:
@@ -174,7 +172,9 @@ RCT_EXPORT_MODULE();
 RCT_EXPORT_METHOD(runMotionDna:(NSString*)key callback:(RCTResponseSenderBlock)initializationCallback)
 {
   dispatch_async(dispatch_get_main_queue(), ^{
-    _motionDnaManager = [[MotionDnaManager alloc] init];
+    if (_motionDnaManager == nil) {
+      _motionDnaManager = [[MotionDnaManager alloc] init];
+    }
     [_motionDnaManager runMotionDna:key];
     _motionDnaManager.controller = self;
     initializationCallback(@[[NSNull null]]);
