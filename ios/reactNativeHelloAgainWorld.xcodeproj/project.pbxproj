@@ -1128,7 +1128,7 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-reactNativeHelloAgainWorld/Pods-reactNativeHelloAgainWorld-frameworks.sh",
-				"${PODS_ROOT}/../../../ios-sdk/build/release-universal/MotionDnaSDK.framework",
+				"${PODS_ROOT}/MotionDnaSDK/MotionDnaSDK.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (

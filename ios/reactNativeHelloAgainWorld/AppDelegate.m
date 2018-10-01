@@ -9,6 +9,8 @@
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
+#import "MotionDnaManager.h"
+#import "MotionDnaReactBridge.h"
 
 @implementation AppDelegate
 
@@ -36,4 +38,11 @@
   return YES;
 }
 
+
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+  MotionDnaManager *mDNA = [MotionDnaReactBridge sharedMDNAManager];
+  if (mDNA != nil) {
+    [mDNA enableBackgroundSensors];
+  }
+}
 @end
