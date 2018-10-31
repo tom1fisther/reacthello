@@ -9,7 +9,7 @@ target 'reactNativeHelloAgainWorld' do
    use_frameworks!
 
   # Pods for reactNativeHelloAgainWorld
-   pod 'MotionDnaSDK', :git => 'https://github.com/navisens/iOS-SDK.git'
+   pod 'MotionDnaSDK'
 
 
 end
