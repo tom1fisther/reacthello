@@ -140,7 +140,7 @@ dependencies {
 //     compile fileTree(dir: "libs", include: ["*.jar"])
     compile "com.android.support:appcompat-v7:23.0.1"
     compile "com.facebook.react:react-native:+"  // From node_modules
-   compile group: "com.navisens", name: "motiondnaapi", version: "1.7.1", changing: true
+   compile group: "com.navisens", name: "motiondnaapi", version: "1.7.3", changing: true
 
 
 
